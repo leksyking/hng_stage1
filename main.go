@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/rs/cors"
 )
 
 type Desription struct {
@@ -15,10 +17,12 @@ type Desription struct {
 }
 
 func main() {
-	http.HandleFunc("/", greetings)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", greetings)
 
+	handler := cors.Default().Handler(mux)
 	fmt.Println("Server started on port 8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":8080", handler); err != nil {
 		log.Fatal(err)
 	}
 }
