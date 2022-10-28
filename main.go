@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/rs/cors"
 )
@@ -28,9 +29,12 @@ func main() {
 
 	mux.HandleFunc("/", greetings)
 	handler := c.Handler(mux)
-
-	fmt.Println("Server started on port 8080")
-	if err := http.ListenAndServe(":8080", handler); err != nil {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	fmt.Println("Server started on port", port)
+	if err := http.ListenAndServe(":"+port, handler); err != nil {
 		log.Fatal(err)
 	}
 }
