@@ -20,12 +20,8 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", greetings)
 
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowCredentials: true,
-		Debug:            true,
-	})
-	handler := c.Handler(mux)
+	handler := cors.Default().Handler(mux)
+
 	fmt.Println("Server started on port 8080")
 	if err := http.ListenAndServe(":8080", handler); err != nil {
 		log.Fatal(err)
