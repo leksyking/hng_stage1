@@ -18,9 +18,16 @@ type Desription struct {
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", greetings)
 
-	handler := cors.Default().Handler(mux)
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"}, //all
+		AllowedMethods:   []string{http.MethodPost, http.MethodGet},
+		AllowedHeaders:   []string{"*"}, //all
+		AllowCredentials: false,         //none
+	})
+
+	mux.HandleFunc("/", greetings)
+	handler := c.Handler(mux)
 
 	fmt.Println("Server started on port 8080")
 	if err := http.ListenAndServe(":8080", handler); err != nil {
